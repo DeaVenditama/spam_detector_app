@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+        <title>Check SPAM Message</title>
+    </head>
+    <body>
+        <div class="text-center mt-3" id="app">
+            <h1>Check SPAM Message</h1>
+            <textarea v-model="message" class="form-control" id="message" style='width:30%; display:initial'></textarea><br>
+            <button v-on:click="checkMessage" class="btn btn-success" >Check</button> 
+            <h3>{{ result }}</h3>   
+        </div>
+    </body>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: null,
+                result: null
+            },
+            methods: {
+                checkMessage: function () {
+                    let url = "http://127.0.0.1:5000/predict?text="+this.message;
+                    axios
+                        .get(url)
+                        .then(
+                            response => {
+                                let resultMessage = "SPAM";
+                                if(response.data==0)
+                                {
+                                    resultMessage = "NOT SPAM";
+                                }
+                                this.result = resultMessage;
+                            }
+                        )
+                }
+            }
+        });
+    </script>
+</html>
